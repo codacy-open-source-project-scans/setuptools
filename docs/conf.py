@@ -9,7 +9,7 @@ html_theme = "furo"
 # Link dates and other references in the changelog
 extensions += ['rst.linker']
 link_files = {
-    '../CHANGES.rst': dict(
+    '../NEWS.rst': dict(
         using=dict(
             BB='https://bitbucket.org',
             GH='https://github.com',
@@ -222,6 +222,8 @@ extensions += ['sphinxcontrib.towncrier']
 towncrier_draft_working_directory = '..'
 # Avoid an empty section for unpublished changes.
 towncrier_draft_include_empty = False
+# sphinx-contrib/sphinxcontrib-towncrier#81
+towncrier_draft_config_path = 'towncrier.toml'
 
 extensions += ['jaraco.tidelift']
 
