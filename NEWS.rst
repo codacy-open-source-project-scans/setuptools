@@ -1,3 +1,23 @@
+v68.1.2
+=======
+
+Misc
+----
+
+- #4022, #4022
+
+
+v68.1.1
+=======
+
+Bugfixes
+--------
+
+- Fix editable install finder handling of nested packages, by only handling 1
+  level of nesting and relying on ``importlib.machinery`` to find the remaining
+  modules based on the parent package path. (#4020)
+
+
 v68.1.0
 =======
 
