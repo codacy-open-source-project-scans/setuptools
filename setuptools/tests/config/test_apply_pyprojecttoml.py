@@ -13,7 +13,9 @@ from zipfile import ZipFile
 
 import pytest
 from ini2toml.api import Translator
-from packaging.metadata import Metadata
+
+# TODO: replace with `from packaging.metadata import Metadata` in future versions
+from .._packaging_compat import Metadata
 
 import setuptools  # noqa ensure monkey patch to metadata
 from setuptools.dist import Distribution
@@ -419,6 +421,25 @@ class TestMeta:
         """Meta test to ensure auxiliary test files are not in wheel"""
         with ZipFile(setuptools_wheel) as zipfile:
             assert not any(name.endswith(EXAMPLES_FILE) for name in zipfile.namelist())
+
+
+class TestInteropCommandLineParsing:
+    def test_version(self, tmp_path, monkeypatch, capsys):
+        # See pypa/setuptools#4047
+        # This test can be removed once the CLI interface of setup.py is removed
+        monkeypatch.chdir(tmp_path)
+        toml_config = """
+        [project]
+        name = "test"
+        version = "42.0"
+        """
+        pyproject = Path(tmp_path, "pyproject.toml")
+        pyproject.write_text(cleandoc(toml_config), encoding="utf-8")
+        opts = {"script_args": ["--version"]}
+        dist = pyprojecttoml.apply_configuration(Distribution(opts), pyproject)
+        dist.parse_command_line()  # <-- there should be no exception here.
+        captured = capsys.readouterr()
+        assert "42.0" in captured.out
 
 
 # --- Auxiliary Functions ---
