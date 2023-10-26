@@ -114,19 +114,6 @@ intersphinx_mapping.update(
     }
 )
 
-# Support tooltips on references
-extensions += ['hoverxref.extension']
-hoverxref_auto_ref = True
-hoverxref_intersphinx = [
-    'python',
-    'pip',
-    'build',
-    'PyPUG',
-    'packaging',
-    'twine',
-    'importlib-resources',
-]
-
 # Add support for linking usernames
 github_url = 'https://github.com'
 github_repo_org = 'pypa'
@@ -213,7 +200,12 @@ nitpick_ignore = [
 
 # Allow linking objects on other Sphinx sites seamlessly:
 intersphinx_mapping.update(
-    python=('https://docs.python.org/3', None),
+    # python=('https://docs.python.org/3', None),
+    python=('https://docs.python.org/3.11/', None),
+    # ^-- Python 3.11 is required because it still contains `distutils`.
+    #     Just leaving it as `3` would imply 3.12+, but that causes an
+    #     error with the cross references to disutils functions.
+    #     Inventory cache may cause errors, deleting it solves the problem.
 )
 
 # Add support for the unreleased "next-version" change notes
